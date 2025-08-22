@@ -552,10 +552,10 @@
             
             <p><strong>Step 1:</strong> Get a free webhook URL from one of these services:</p>
             <div class="service-buttons">
-                <button class="btn" onclick="openWebhookSite()">📡 Webhook.site</button>
-                <button class="btn" onclick="openRequestCatcher()">🎯 RequestCatcher</button>
-                <button class="btn" onclick="openNgrok()">🚇 ngrok</button>
-                <button class="btn" onclick="openZapier()">⚡ Zapier</button>
+                <button class="btn" id="webhook-site-btn">📡 Webhook.site</button>
+                <button class="btn" id="request-catcher-btn">🎯 RequestCatcher</button>
+                <button class="btn" id="ngrok-btn">🚇 ngrok</button>
+                <button class="btn" id="zapier-btn">⚡ Zapier</button>
             </div>
             
             <p><strong>Step 2:</strong> Enter your webhook URL and start monitoring:</p>
@@ -564,16 +564,16 @@
                        placeholder="https://webhook.site/your-unique-id" 
                        value="https://webhook.site/86e548d1-46d4-4e90-9c2a-c008da0e5836">
                 <div class="btn-group">
-                    <button class="btn btn-success" onclick="startListening()">🎧 Start</button>
-                    <button class="btn btn-danger" onclick="stopListening()">⏹️ Stop</button>
+                    <button class="btn btn-success" id="start-btn">🎧 Start</button>
+                    <button class="btn btn-danger" id="stop-btn">⏹️ Stop</button>
                 </div>
             </div>
             
             <div class="btn-group">
-                <button class="btn" onclick="testNewHit()">🆕 Test New HIT</button>
-                <button class="btn" onclick="testStatus()">📊 Test Status</button>
-                <button class="btn" onclick="clearAll()">🗑️ Clear Feed</button>
-                <button class="btn" onclick="copyWebhookUrl()">📋 Copy URL</button>
+                <button class="btn" id="test-new-hit-btn">🆕 Test New HIT</button>
+                <button class="btn" id="test-status-btn">📊 Test Status</button>
+                <button class="btn" id="clear-all-btn">🗑️ Clear Feed</button>
+                <button class="btn" id="copy-webhook-btn">📋 Copy URL</button>
             </div>
 
             <div class="sound-controls">
@@ -585,7 +585,7 @@
 
             <div class="notification-permission" id="notificationPermission">
                 <p><strong>Enable Browser Notifications:</strong> Click "Allow" when prompted to receive desktop alerts for new HITs.</p>
-                <button class="btn" onclick="requestNotificationPermission()">🔔 Enable Notifications</button>
+                <button class="btn" id="enable-notifications-btn">🔔 Enable Notifications</button>
             </div>
 
             <div class="webhook-log" id="webhookLog">
@@ -639,11 +639,6 @@
         </div>
     </div>
 
-    <!-- Audio elements for notifications -->
-    <audio id="newHitSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEUBj+Y2fPKdSgEInHA8d6TOAQL..." type="audio/wav">
-    </audio>
-
     <script>
         class MTurkLiveFeed {
             constructor() {
@@ -677,6 +672,7 @@
                 this.loadSettings();
                 this.startUptime();
                 this.updateDisplayUrl();
+                this.setupEventListeners();
                 
                 // Auto-start if webhook URL is configured
                 if (this.webhookUrl.value.trim()) {
@@ -684,6 +680,87 @@
                         this.startListening();
                     }, 1000);
                 }
+            }
+
+            setupEventListeners() {
+                // Webhook service buttons
+                document.getElementById('webhook-site-btn').addEventListener('click', () => {
+                    window.open('https://webhook.site/', '_blank');
+                });
+                
+                document.getElementById('request-catcher-btn').addEventListener('click', () => {
+                    window.open('https://requestcatcher.com/', '_blank');
+                });
+                
+                document.getElementById('ngrok-btn').addEventListener('click', () => {
+                    window.open('https://ngrok.com/', '_blank');
+                });
+                
+                document.getElementById('zapier-btn').addEventListener('click', () => {
+                    window.open('https://zapier.com/apps/webhook/integrations', '_blank');
+                });
+
+                // Control buttons
+                document.getElementById('start-btn').addEventListener('click', () => {
+                    this.startListening();
+                });
+                
+                document.getElementById('stop-btn').addEventListener('click', () => {
+                    this.stopListening();
+                });
+                
+                document.getElementById('test-new-hit-btn').addEventListener('click', () => {
+                    this.testNewHit();
+                });
+                
+                document.getElementById('test-status-btn').addEventListener('click', () => {
+                    this.testStatus();
+                });
+                
+                document.getElementById('clear-all-btn').addEventListener('click', () => {
+                    this.clearAll();
+                });
+                
+                document.getElementById('copy-webhook-btn').addEventListener('click', () => {
+                    this.copyWebhookUrl();
+                });
+                
+                document.getElementById('enable-notifications-btn').addEventListener('click', () => {
+                    this.requestNotificationPermission();
+                });
+
+                // Input listeners
+                this.webhookUrl.addEventListener('input', () => {
+                    this.updateDisplayUrl();
+                });
+
+                document.getElementById('soundEnabled').addEventListener('change', () => {
+                    this.saveSettings();
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey || e.metaKey) {
+                        switch(e.key) {
+                            case 'Enter':
+                                e.preventDefault();
+                                if (this.isListening) {
+                                    this.stopListening();
+                                } else {
+                                    this.startListening();
+                                }
+                                break;
+                            case 'r':
+                                e.preventDefault();
+                                this.clearAll();
+                                break;
+                            case 't':
+                                e.preventDefault();
+                                this.testNewHit();
+                                break;
+                        }
+                    }
+                });
             }
 
             loadSettings() {
@@ -954,7 +1031,7 @@
             updateStats() {
                 document.getElementById('currentHits').textContent = this.stats.currentHits;
                 document.getElementById('totalValue').textContent = '
-                 + this.stats.totalValue.toFixed(2);
+             + this.stats.totalValue.toFixed(2);
                 document.getElementById('newHitsToday').textContent = this.stats.newHitsToday;
                 document.getElementById('lastUpdate').textContent = this.stats.lastUpdate || '-';
                 document.getElementById('webhookCount').textContent = this.stats.webhookCount;
@@ -1020,178 +1097,145 @@
                     }, 10000);
                 }
             }
-        }
 
-        // Global functions
-        function openWebhookSite() {
-            window.open('https://webhook.site/', '_blank');
-        }
-
-        function openRequestCatcher() {
-            window.open('https://requestcatcher.com/', '_blank');
-        }
-
-        function openNgrok() {
-            window.open('https://ngrok.com/', '_blank');
-        }
-
-        function openZapier() {
-            window.open('https://zapier.com/apps/webhook/integrations', '_blank');
-        }
-
-        function startListening() {
-            window.liveFeed.startListening();
-        }
-
-        function stopListening() {
-            window.liveFeed.stopListening();
-        }
-
-        function copyWebhookUrl() {
-            const url = document.getElementById('webhookUrl').value;
-            if (url) {
-                navigator.clipboard.writeText(url).then(() => {
-                    window.liveFeed.logMessage('📋 Webhook URL copied to clipboard', 'success');
-                }).catch(() => {
-                    window.liveFeed.logMessage('❌ Failed to copy URL', 'error');
-                });
+            requestNotificationPermission() {
+                if ('Notification' in window) {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            document.getElementById('notificationPermission').classList.remove('show');
+                            this.logMessage('🔔 Browser notifications enabled', 'success');
+                        }
+                    });
+                }
             }
-        }
 
-        function requestNotificationPermission() {
-            if ('Notification' in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        document.getElementById('notificationPermission').classList.remove('show');
-                        window.liveFeed.logMessage('🔔 Browser notifications enabled', 'success');
-                    }
-                });
+            copyWebhookUrl() {
+                const url = this.webhookUrl.value;
+                if (url) {
+                    navigator.clipboard.writeText(url).then(() => {
+                        this.logMessage('📋 Webhook URL copied to clipboard', 'success');
+                    }).catch(() => {
+                        this.logMessage('❌ Failed to copy URL', 'error');
+                    });
+                }
             }
-        }
 
-        function testNewHit() {
-            const testData = {
-                source: 'mturk-userscript',
-                event_type: 'new_hits_alert',
-                timestamp: new Date().toISOString(),
-                worker_id: 'A94EAUQ8BYQGI',
-                data: {
-                    type: 'new_hits_alert',
-                    newHitsCount: 1,
-                    newHits: [{
-                        requester_name: 'TestRequester',
-                        title: 'Sample Survey Task - Test Data (High Paying)',
-                        reward: 2.50
-                    }],
-                    totalNewValue: '2.50'
-                },
-                live_feed: {
-                    title: '🆕 1 New HIT Available! (TEST)',
-                    subtitle: 'Total Value: $2.50',
-                    timestamp: new Date().toLocaleTimeString(),
-                    urgency: 'high',
-                    hits: [{
-                        requester: 'TestRequester',
-                        title: 'Sample Survey Task - Test Data (High Paying)',
-                        reward: '$2.50',
+            testNewHit() {
+                const testData = {
+                    source: 'mturk-userscript',
+                    event_type: 'new_hits_alert',
+                    timestamp: new Date().toISOString(),
+                    worker_id: 'A94EAUQ8BYQGI',
+                    data: {
+                        type: 'new_hits_alert',
+                        newHitsCount: 1,
+                        newHits: [{
+                            requester_name: 'TestRequester',
+                            title: 'Sample Survey Task - Test Data (High Paying)',
+                            reward: 2.50
+                        }],
+                        totalNewValue: '2.50'
+                    },
+                    live_feed: {
+                        title: '🆕 1 New HIT Available! (TEST)',
+                        subtitle: 'Total Value: $2.50',
+                        timestamp: new Date().toLocaleTimeString(),
                         urgency: 'high',
-                        timeLeft: '45m'
-                    }]
-                }
-            };
-            
-            window.liveFeed.processWebhookData(testData);
-        }
-
-        function testStatus() {
-            const testData = {
-                source: 'mturk-userscript',
-                event_type: 'status_update',
-                timestamp: new Date().toISOString(),
-                worker_id: 'A94EAUQ8BYQGI',
-                data: {
-                    type: 'status_update',
-                    status: {
-                        currentHitsCount: 4,
-                        totalValue: '3.60',
-                        hits: [
-                            {
-                                requester: 'alalyresearch',
-                                title: 'Composite Attractiveness - African American Male',
-                                reward: '$0.05',
-                                timeLeft: '35m'
-                            },
-                            {
-                                requester: 'alalyresearch',
-                                title: 'Composite Attractiveness - African American Female',
-                                reward: '$0.05',
-                                timeLeft: '37m'
-                            },
-                            {
-                                requester: 'TestRequester',
-                                title: 'Sample Survey Task - Test Data (High Paying)',
-                                reward: '$2.50',
-                                timeLeft: '45m'
-                            },
-                            {
-                                requester: 'ResearchLab',
-                                title: 'Quick Decision Making Study - 10 minutes',
-                                reward: '$1.00',
-                                timeLeft: '1h 20m'
-                            }
-                        ]
+                        hits: [{
+                            requester: 'TestRequester',
+                            title: 'Sample Survey Task - Test Data (High Paying)',
+                            reward: '$2.50',
+                            urgency: 'high',
+                            timeLeft: '45m'
+                        }]
                     }
-                },
-                live_feed: {
-                    title: '📊 Current Queue Status (TEST)',
-                    subtitle: '4 HITs • $3.60 total',
-                    timestamp: new Date().toLocaleTimeString()
-                }
-            };
-            
-            window.liveFeed.processWebhookData(testData);
+                };
+                
+                this.processWebhookData(testData);
+            }
+
+            testStatus() {
+                const testData = {
+                    source: 'mturk-userscript',
+                    event_type: 'status_update',
+                    timestamp: new Date().toISOString(),
+                    worker_id: 'A94EAUQ8BYQGI',
+                    data: {
+                        type: 'status_update',
+                        status: {
+                            currentHitsCount: 4,
+                            totalValue: '3.60',
+                            hits: [
+                                {
+                                    requester: 'alalyresearch',
+                                    title: 'Composite Attractiveness - African American Male',
+                                    reward: '$0.05',
+                                    timeLeft: '35m'
+                                },
+                                {
+                                    requester: 'alalyresearch',
+                                    title: 'Composite Attractiveness - African American Female',
+                                    reward: '$0.05',
+                                    timeLeft: '37m'
+                                },
+                                {
+                                    requester: 'TestRequester',
+                                    title: 'Sample Survey Task - Test Data (High Paying)',
+                                    reward: '$2.50',
+                                    timeLeft: '45m'
+                                },
+                                {
+                                    requester: 'ResearchLab',
+                                    title: 'Quick Decision Making Study - 10 minutes',
+                                    reward: '$1.00',
+                                    timeLeft: '1h 20m'
+                                }
+                            ]
+                        }
+                    },
+                    live_feed: {
+                        title: '📊 Current Queue Status (TEST)',
+                        subtitle: '4 HITs • $3.60 total',
+                        timestamp: new Date().toLocaleTimeString()
+                    }
+                };
+                
+                this.processWebhookData(testData);
+            }
+
+            clearAll() {
+                // Clear feed
+                this.feedContent.innerHTML = `
+                    <div class="no-data">
+                        <h3>🎯 Feed Cleared!</h3>
+                        <p>Ready to receive new MTurk webhook data.</p>
+                        <p>Your webhook URL: <code>${this.webhookUrl.value || 'Not configured'}</code></p>
+                    </div>
+                `;
+                
+                // Clear logs
+                this.webhookLog.innerHTML = `
+                    <div class="log-entry log-info">
+                        📋 [${new Date().toLocaleTimeString()}] Feed and logs cleared.
+                    </div>
+                `;
+                
+                // Reset stats
+                this.stats = {
+                    currentHits: 0,
+                    totalValue: 0,
+                    newHitsToday: 0,
+                    lastUpdate: null,
+                    webhookCount: 0
+                };
+                this.updateStats();
+                localStorage.removeItem('mturk_webhook_stats');
+            }
         }
 
-        function clearAll() {
-            // Clear feed
-            document.getElementById('feedContent').innerHTML = `
-                <div class="no-data">
-                    <h3>🎯 Feed Cleared!</h3>
-                    <p>Ready to receive new MTurk webhook data.</p>
-                    <p>Your webhook URL: <code>${document.getElementById('webhookUrl').value || 'Not configured'}</code></p>
-                </div>
-            `;
-            
-            // Clear logs
-            document.getElementById('webhookLog').innerHTML = `
-                <div class="log-entry log-info">
-                    📋 [${new Date().toLocaleTimeString()}] Feed and logs cleared.
-                </div>
-            `;
-            
-            // Reset stats
-            window.liveFeed.stats = {
-                currentHits: 0,
-                totalValue: 0,
-                newHitsToday: 0,
-                lastUpdate: null,
-                webhookCount: 0
-            };
-            window.liveFeed.updateStats();
-            localStorage.removeItem('mturk_webhook_stats');
-        }
-
-        // Auto-update webhook URL display when input changes
+        // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             window.liveFeed = new MTurkLiveFeed();
-            
-            document.getElementById('webhookUrl').addEventListener('input', () => {
-                window.liveFeed.updateDisplayUrl();
-            });
-
-            document.getElementById('soundEnabled').addEventListener('change', () => {
-                window.liveFeed.saveSettings();
-            });
         });
 
         // Manual webhook data injection (for external integrations)
@@ -1200,30 +1244,6 @@
                 window.liveFeed.processWebhookData(data);
             }
         };
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 'Enter':
-                        e.preventDefault();
-                        if (window.liveFeed.isListening) {
-                            stopListening();
-                        } else {
-                            startListening();
-                        }
-                        break;
-                    case 'r':
-                        e.preventDefault();
-                        clearAll();
-                        break;
-                    case 't':
-                        e.preventDefault();
-                        testNewHit();
-                        break;
-                }
-            }
-        });
 
         // Keep page alive and prevent sleep
         setInterval(() => {
@@ -1235,4 +1255,4 @@
     </script>
 </body>
 </html>
-                
+            
