@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +20,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -31,185 +32,182 @@
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .setup-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .setup-panel h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+        }
+
+        .webhook-setup {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: end;
+            margin: 20px 0;
+        }
+
+        .webhook-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            transition: border-color 0.3s ease;
+        }
+
+        .webhook-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: #00c851;
+        }
+
+        .btn-success:hover {
+            background: #00a844;
+        }
+
+        .btn-danger {
+            background: #ff4444;
+        }
+
+        .btn-danger:hover {
+            background: #e63939;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .service-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
         }
 
         .status-bar {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
         }
 
         .status-item {
             text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(102, 126, 234, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .status-item:hover {
+            transform: translateY(-3px);
         }
 
         .status-value {
-            font-size: 2rem;
-            font-weight: bold;
+            font-size: 2.2rem;
+            font-weight: 700;
             color: #667eea;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .status-label {
             color: #666;
             font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+            font-weight: 500;
         }
 
         .feed {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .feed-header {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .feed-content {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .feed-item {
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-            animation: slideIn 0.5s ease-out;
-            transition: background-color 0.3s ease;
-        }
-
-        .feed-item:hover {
-            background-color: #f8f9ff;
-        }
-
-        .feed-item.new-hit {
-            border-left: 4px solid #00c851;
-            background: linear-gradient(90deg, #00c85120 0%, transparent 100%);
-        }
-
-        .feed-item.status {
-            border-left: 4px solid #667eea;
-            background: linear-gradient(90deg, #667eea20 0%, transparent 100%);
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .feed-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 8px;
+            padding: 25px;
+            font-size: 1.3rem;
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .feed-subtitle {
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .hit-list {
-            margin-top: 10px;
-        }
-
-        .hit-item {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .hit-info {
-            overflow: hidden;
-        }
-
-        .hit-requester {
-            font-weight: bold;
-            color: #667eea;
-            font-size: 0.9rem;
-        }
-
-        .hit-title {
-            color: #333;
-            font-size: 0.85rem;
-            margin-top: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .hit-reward {
-            font-weight: bold;
-            color: #00c851;
-            font-size: 1.1rem;
-        }
-
-        .hit-time {
-            font-size: 0.8rem;
-            color: #666;
-            text-align: right;
-        }
-
-        .urgency-critical { border-left: 4px solid #ff4444; }
-        .urgency-high { border-left: 4px solid #ff8800; }
-        .urgency-medium { border-left: 4px solid #ffbb33; }
-        .urgency-low { border-left: 4px solid #00c851; }
-
-        .timestamp {
-            font-size: 0.8rem;
-            color: #999;
-        }
-
-        .no-data {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
         .connection-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+            transition: all 0.3s ease;
         }
 
         .connected {
             background: #00c851;
             color: white;
+            box-shadow: 0 0 20px rgba(0, 200, 81, 0.3);
         }
 
         .disconnected {
@@ -220,35 +218,381 @@
         .waiting {
             background: #ffbb33;
             color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .feed-content {
+            max-height: 600px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #667eea #f1f1f1;
+        }
+
+        .feed-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .feed-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .feed-content::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        .feed-item {
+            padding: 25px;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            animation: slideIn 0.6s ease-out;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .feed-item:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+
+        .feed-item.new-hit {
+            border-left: 5px solid #00c851;
+            background: linear-gradient(90deg, rgba(0, 200, 81, 0.1) 0%, transparent 100%);
+        }
+
+        .feed-item.status {
+            border-left: 5px solid #667eea;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+        }
+
+        .feed-item.critical {
+            border-left: 5px solid #ff4444;
+            background: linear-gradient(90deg, rgba(255, 68, 68, 0.1) 0%, transparent 100%);
+            animation: criticalPulse 2s infinite;
+        }
+
+        @keyframes criticalPulse {
+            0%, 100% { border-left-color: #ff4444; }
+            50% { border-left-color: #ff8888; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feed-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #333;
+        }
+
+        .feed-subtitle {
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .hit-list {
+            margin-top: 15px;
+        }
+
+        .hit-item {
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 15px;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .hit-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .hit-info {
+            overflow: hidden;
+        }
+
+        .hit-requester {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .hit-title {
+            color: #333;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hit-reward {
+            font-weight: 700;
+            color: #00c851;
+            font-size: 1.2rem;
+        }
+
+        .hit-time {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .urgency-critical { 
+            border-left: 4px solid #ff4444;
+            animation: urgentBlink 1s infinite;
+        }
+
+        .urgency-high { 
+            border-left: 4px solid #ff8800; 
+        }
+
+        .urgency-medium { 
+            border-left: 4px solid #ffbb33; 
+        }
+
+        .urgency-low { 
+            border-left: 4px solid #00c851; 
+        }
+
+        @keyframes urgentBlink {
+            0%, 100% { border-left-color: #ff4444; }
+            50% { border-left-color: #ff8888; }
+        }
+
+        .timestamp {
+            font-size: 0.85rem;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 40px;
+            color: #666;
+        }
+
+        .no-data h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .no-data p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .no-data code {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .webhook-log {
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .log-entry {
+            margin: 8px 0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            line-height: 1.4;
+        }
+
+        .log-success {
+            background: rgba(0, 200, 81, 0.1);
+            color: #00a844;
+            border-left: 3px solid #00c851;
+        }
+
+        .log-error {
+            background: rgba(255, 68, 68, 0.1);
+            color: #e63939;
+            border-left: 3px solid #ff4444;
+        }
+
+        .log-info {
+            background: rgba(102, 126, 234, 0.1);
+            color: #5a6fd8;
+            border-left: 3px solid #667eea;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 15px;
             }
             
             .header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .status-bar {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
             }
             
             .hit-item {
                 grid-template-columns: 1fr;
-                gap: 5px;
+                gap: 10px;
+                text-align: center;
             }
+
+            .webhook-setup {
+                grid-template-columns: 1fr;
+            }
+
+            .service-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .notification-permission {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .notification-permission.show {
+            display: block;
+        }
+
+        .sound-controls {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 10px;
+        }
+
+        .sound-controls label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="connection-status" id="connectionStatus">Waiting for data...</div>
-    
     <div class="container">
         <div class="header">
-            <h1>🎯 MTurk Live Feed</h1>
-            <p>Real-time HIT monitoring dashboard</p>
+            <h1>🎯 MTurk Live Feed Dashboard</h1>
+            <p>Real-time HIT monitoring with webhook integration</p>
+        </div>
+
+        <div class="setup-panel">
+            <h2>🔗 Webhook Configuration</h2>
+            
+            <p><strong>Step 1:</strong> Get a free webhook URL from one of these services:</p>
+            <div class="service-buttons">
+                <button class="btn" onclick="openWebhookSite()">📡 Webhook.site</button>
+                <button class="btn" onclick="openRequestCatcher()">🎯 RequestCatcher</button>
+                <button class="btn" onclick="openNgrok()">🚇 ngrok</button>
+                <button class="btn" onclick="openZapier()">⚡ Zapier</button>
+            </div>
+            
+            <p><strong>Step 2:</strong> Enter your webhook URL and start monitoring:</p>
+            <div class="webhook-setup">
+                <input type="text" class="webhook-input" id="webhookUrl" 
+                       placeholder="https://webhook.site/your-unique-id" 
+                       value="https://webhook.site/86e548d1-46d4-4e90-9c2a-c008da0e5836">
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="startListening()">🎧 Start</button>
+                    <button class="btn btn-danger" onclick="stopListening()">⏹️ Stop</button>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="testNewHit()">🆕 Test New HIT</button>
+                <button class="btn" onclick="testStatus()">📊 Test Status</button>
+                <button class="btn" onclick="clearAll()">🗑️ Clear Feed</button>
+                <button class="btn" onclick="copyWebhookUrl()">📋 Copy URL</button>
+            </div>
+
+            <div class="sound-controls">
+                <label>
+                    <input type="checkbox" id="soundEnabled" checked>
+                    <span>🔊 Enable sound notifications</span>
+                </label>
+            </div>
+
+            <div class="notification-permission" id="notificationPermission">
+                <p><strong>Enable Browser Notifications:</strong> Click "Allow" when prompted to receive desktop alerts for new HITs.</p>
+                <button class="btn" onclick="requestNotificationPermission()">🔔 Enable Notifications</button>
+            </div>
+
+            <div class="webhook-log" id="webhookLog">
+                <div class="log-entry log-info">
+                    📋 [Ready] Webhook live feed dashboard initialized. Configure your webhook URL above.
+                </div>
+            </div>
         </div>
 
         <div class="status-bar">
@@ -268,166 +612,314 @@
                 <div class="status-value" id="lastUpdate">-</div>
                 <div class="status-label">Last Update</div>
             </div>
+            <div class="status-item">
+                <div class="status-value" id="webhookCount">0</div>
+                <div class="status-label">Webhooks Received</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="uptime">00:00</div>
+                <div class="status-label">Uptime</div>
+            </div>
         </div>
 
         <div class="feed">
             <div class="feed-header">
                 📡 Live Feed Activity
+                <div class="connection-status" id="connectionStatus">Disconnected</div>
             </div>
             <div class="feed-content" id="feedContent">
                 <div class="no-data">
-                    <h3>Waiting for MTurk data...</h3>
-                    <p>Make sure your userscript is running and monitoring HITs.</p>
+                    <h3>🎯 Ready for MTurk Data!</h3>
+                    <p>Your live feed dashboard is configured and ready to receive webhook data.</p>
+                    <p>Make sure your userscript includes this webhook URL:</p>
+                    <code id="displayWebhookUrl">Configure webhook URL above</code>
+                    <p style="margin-top: 15px;">Use the test buttons above to see how new HITs will appear.</p>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Audio elements for notifications -->
+    <audio id="newHitSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEUBj+Y2fPKdSgEInHA8d6TOAQL..." type="audio/wav">
+    </audio>
 
     <script>
         class MTurkLiveFeed {
             constructor() {
                 this.feedContent = document.getElementById('feedContent');
                 this.connectionStatus = document.getElementById('connectionStatus');
+                this.webhookLog = document.getElementById('webhookLog');
+                this.webhookUrl = document.getElementById('webhookUrl');
+                this.displayWebhookUrl = document.getElementById('displayWebhookUrl');
+                this.isListening = false;
+                this.pollInterval = null;
+                this.startTime = Date.now();
+                this.uptimeInterval = null;
+                this.lastWebhookTime = null;
+                
                 this.stats = {
                     currentHits: 0,
                     totalValue: 0,
                     newHitsToday: 0,
-                    lastUpdate: null
+                    lastUpdate: null,
+                    webhookCount: 0
                 };
                 
-                this.startListening();
+                this.init();
+            }
+
+            init() {
+                console.log('🎯 MTurk Live Feed Dashboard started');
+                this.updateConnectionStatus('disconnected');
                 this.setupNotifications();
+                this.setupAudio();
+                this.loadSettings();
+                this.startUptime();
+                this.updateDisplayUrl();
+                
+                // Auto-start if webhook URL is configured
+                if (this.webhookUrl.value.trim()) {
+                    setTimeout(() => {
+                        this.startListening();
+                    }, 1000);
+                }
+            }
+
+            loadSettings() {
+                // Load saved webhook URL
+                const savedUrl = localStorage.getItem('mturk_webhook_url');
+                if (savedUrl) {
+                    this.webhookUrl.value = savedUrl;
+                }
+                
+                // Load saved stats
+                const savedStats = localStorage.getItem('mturk_webhook_stats');
+                if (savedStats) {
+                    try {
+                        this.stats = { ...this.stats, ...JSON.parse(savedStats) };
+                        this.updateStats();
+                    } catch (e) {
+                        console.error('Error loading stats:', e);
+                    }
+                }
+
+                // Load sound setting
+                const soundEnabled = localStorage.getItem('mturk_sound_enabled');
+                if (soundEnabled !== null) {
+                    document.getElementById('soundEnabled').checked = soundEnabled === 'true';
+                }
+            }
+
+            saveSettings() {
+                localStorage.setItem('mturk_webhook_url', this.webhookUrl.value);
+                localStorage.setItem('mturk_webhook_stats', JSON.stringify(this.stats));
+                localStorage.setItem('mturk_sound_enabled', document.getElementById('soundEnabled').checked);
+            }
+
+            setupAudio() {
+                // Create notification sound programmatically
+                this.audioContext = null;
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Audio context not available');
+                }
+            }
+
+            playNotificationSound() {
+                if (!document.getElementById('soundEnabled').checked) return;
+                
+                if (this.audioContext) {
+                    // Create a simple beep sound
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(600, this.audioContext.currentTime + 0.1);
+                    
+                    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + 0.3);
+                }
+            }
+
+            startUptime() {
+                this.uptimeInterval = setInterval(() => {
+                    const elapsed = Date.now() - this.startTime;
+                    const minutes = Math.floor(elapsed / 60000);
+                    const seconds = Math.floor((elapsed % 60000) / 1000);
+                    document.getElementById('uptime').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            updateDisplayUrl() {
+                const url = this.webhookUrl.value.trim();
+                this.displayWebhookUrl.textContent = url || 'Configure webhook URL above';
             }
 
             startListening() {
-                // For demo purposes, we'll simulate receiving data
-                // In a real implementation, you would:
-                // 1. Use WebSockets to receive real-time data
-                // 2. Set up an API endpoint to receive the userscript data
-                // 3. Use Server-Sent Events (SSE)
-                // 4. Use a service like Pusher, Firebase, or Socket.io
+                const url = this.webhookUrl.value.trim();
+                if (!url) {
+                    this.logMessage('❌ Please enter a webhook URL first', 'error');
+                    return;
+                }
 
-                console.log('🎯 MTurk Live Feed Dashboard started');
+                if (!this.isValidWebhookUrl(url)) {
+                    this.logMessage('❌ Invalid webhook URL format', 'error');
+                    return;
+                }
+
+                this.isListening = true;
+                this.saveSettings();
+                this.updateDisplayUrl();
                 this.updateConnectionStatus('waiting');
-
-                // Simulate receiving data for demo
-                this.simulateData();
+                this.logMessage(`🎧 Started listening to: ${this.truncateUrl(url)}`, 'success');
+                
+                // Start polling for data
+                this.startPolling();
             }
 
-            simulateData() {
-                // This simulates receiving data - replace with real implementation
-                setTimeout(() => {
-                    this.receiveData({
-                        type: 'status_update',
-                        timestamp: new Date().toISOString(),
-                        workerId: 'A94EAUQ8BYQGI',
-                        feedType: 'status',
-                        status: {
-                            currentHitsCount: 2,
-                            totalValue: '0.10',
-                            hits: [
-                                {
-                                    requester: 'alalyresearch',
-                                    title: 'Composite Attractiveness - African American Male',
-                                    reward: '$0.05',
-                                    timeLeft: '45m'
-                                },
-                                {
-                                    requester: 'alalyresearch', 
-                                    title: 'Composite Attractiveness - African American Female',
-                                    reward: '$0.05',
-                                    timeLeft: '47m'
-                                }
-                            ]
-                        },
-                        displayData: {
-                            title: '📊 Current Queue Status',
-                            subtitle: '2 HITs • $0.10 total',
-                            timestamp: new Date().toLocaleTimeString()
-                        }
-                    });
-                }, 2000);
+            stopListening() {
+                this.isListening = false;
+                if (this.pollInterval) {
+                    clearInterval(this.pollInterval);
+                    this.pollInterval = null;
+                }
+                this.updateConnectionStatus('disconnected');
+                this.logMessage('⏹️ Stopped listening for webhooks', 'info');
+            }
 
-                // Simulate new HIT after 10 seconds
-                setTimeout(() => {
-                    this.receiveData({
-                        type: 'new_hits_alert',
-                        timestamp: new Date().toISOString(),
-                        workerId: 'A94EAUQ8BYQGI',
-                        newHitsCount: 1,
-                        newHits: [{
-                            requester_name: 'ExampleRequester',
-                            title: 'Quick Survey Task - 5 minutes',
-                            reward: 0.50,
-                            urgency: 'high',
-                            timeLeft: '55m'
-                        }],
-                        totalNewValue: '0.50',
-                        feedType: 'hit_update',
-                        displayData: {
-                            title: '🆕 1 New HIT Available!',
-                            subtitle: 'Total Value: $0.50',
-                            timestamp: new Date().toLocaleTimeString()
-                        }
-                    });
+            startPolling() {
+                // Poll every 10 seconds for webhook.site data
+                this.pollInterval = setInterval(() => {
+                    if (this.webhookUrl.value.includes('webhook.site')) {
+                        this.fetchWebhookSiteData();
+                    }
+                    this.checkConnectionTimeout();
                 }, 10000);
+                
+                this.logMessage('🔄 Polling started (checking every 10 seconds)', 'info');
             }
 
-            receiveData(data) {
-                this.updateConnectionStatus('connected');
-                console.log('📡 Received data:', data);
+            checkConnectionTimeout() {
+                if (this.lastWebhookTime && Date.now() - this.lastWebhookTime > 300000) { // 5 minutes
+                    this.updateConnectionStatus('waiting');
+                }
+            }
 
-                if (data.type === 'new_hits_alert') {
+            async fetchWebhookSiteData() {
+                try {
+                    const url = this.webhookUrl.value;
+                    const webhookId = url.split('/').pop();
+                    const apiUrl = `https://webhook.site/token/${webhookId}/requests?sorting=newest`;
+                    
+                    const response = await fetch(apiUrl);
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.processWebhookSiteData(data);
+                    }
+                } catch (error) {
+                    // Silent fail for polling
+                    console.log('Polling error (normal):', error);
+                }
+            }
+
+            processWebhookSiteData(requests) {
+                const recentRequests = requests.data || [];
+                
+                // Only process requests from the last 5 minutes to avoid duplicates
+                const fiveMinutesAgo = Date.now() - 300000;
+                
+                recentRequests.forEach(request => {
+                    const requestTime = new Date(request.created_at).getTime();
+                    if (requestTime < fiveMinutesAgo) return;
+                    
+                    if (request.content && typeof request.content === 'string') {
+                        try {
+                            const content = JSON.parse(request.content);
+                            if (content.source === 'mturk-userscript' && requestTime > (this.lastWebhookTime || 0)) {
+                                this.processWebhookData(content);
+                                this.lastWebhookTime = requestTime;
+                            }
+                        } catch (e) {
+                            // Not JSON or not our data
+                        }
+                    }
+                });
+            }
+
+            processWebhookData(data) {
+                this.updateConnectionStatus('connected');
+                this.stats.webhookCount++;
+                this.lastWebhookTime = Date.now();
+                this.logMessage(`📡 Received: ${data.event_type} from ${data.worker_id}`, 'success');
+                
+                if (data.event_type === 'new_hits_alert') {
                     this.handleNewHits(data);
-                    this.stats.newHitsToday += data.newHitsCount;
-                } else if (data.type === 'status_update') {
+                    this.stats.newHitsToday += data.data.newHitsCount || 0;
+                    this.playNotificationSound();
+                } else if (data.event_type === 'status_update') {
                     this.handleStatusUpdate(data);
                 }
 
                 this.updateStats();
                 this.stats.lastUpdate = new Date().toLocaleTimeString();
+                this.saveSettings();
             }
 
             handleNewHits(data) {
                 const feedItem = document.createElement('div');
-                feedItem.className = 'feed-item new-hit';
+                feedItem.className = `feed-item new-hit ${data.live_feed?.urgency || 'low'}`;
                 
-                const hitsList = data.newHits.map(hit => `
+                const hits = data.live_feed?.hits || [];
+                const hitsList = hits.map(hit => `
                     <div class="hit-item urgency-${hit.urgency || 'low'}">
                         <div class="hit-info">
-                            <div class="hit-requester">${hit.requester_name}</div>
-                            <div class="hit-title">${hit.title}</div>
+                            <div class="hit-requester">${hit.requester}</div>
+                            <div class="hit-title" title="${hit.title}">${hit.title}</div>
                         </div>
-                        <div class="hit-reward">${typeof hit.reward === 'number' ? '$' + hit.reward.toFixed(2) : hit.reward}</div>
+                        <div class="hit-reward">${hit.reward}</div>
                         <div class="hit-time">${hit.timeLeft || 'Unknown'}</div>
                     </div>
                 `).join('');
 
                 feedItem.innerHTML = `
                     <div class="feed-title">
-                        ${data.displayData.title}
-                        <span class="timestamp">${data.displayData.timestamp}</span>
+                        ${data.live_feed?.title || '🆕 New HITs Available!'}
+                        <span class="timestamp">${data.live_feed?.timestamp || new Date().toLocaleTimeString()}</span>
                     </div>
-                    <div class="feed-subtitle">${data.displayData.subtitle}</div>
+                    <div class="feed-subtitle">${data.live_feed?.subtitle || `${data.data?.newHitsCount || 0} new HITs`}</div>
                     <div class="hit-list">${hitsList}</div>
                 `;
 
                 this.addToFeed(feedItem);
-                this.showNotification(data.displayData.title, data.displayData.subtitle);
+                this.showNotification(
+                    data.live_feed?.title || 'New MTurk HITs!',
+                    data.live_feed?.subtitle || `${data.data?.newHitsCount || 0} HITs available`
+                );
             }
 
             handleStatusUpdate(data) {
-                this.stats.currentHits = data.status.currentHitsCount;
-                this.stats.totalValue = parseFloat(data.status.totalValue || 0);
+                const status = data.data?.status || {};
+                this.stats.currentHits = status.currentHitsCount || 0;
+                this.stats.totalValue = parseFloat(status.totalValue || 0);
 
                 const feedItem = document.createElement('div');
                 feedItem.className = 'feed-item status';
                 
-                const hitsList = data.status.hits.map(hit => `
+                const hits = status.hits || [];
+                const hitsList = hits.map(hit => `
                     <div class="hit-item">
                         <div class="hit-info">
                             <div class="hit-requester">${hit.requester}</div>
-                            <div class="hit-title">${hit.title}</div>
+                            <div class="hit-title" title="${hit.title}">${hit.title}</div>
                         </div>
                         <div class="hit-reward">${hit.reward}</div>
                         <div class="hit-time">${hit.timeLeft}</div>
@@ -436,10 +928,10 @@
 
                 feedItem.innerHTML = `
                     <div class="feed-title">
-                        ${data.displayData.title}
-                        <span class="timestamp">${data.displayData.timestamp}</span>
+                        ${data.live_feed?.title || '📊 Queue Status Update'}
+                        <span class="timestamp">${data.live_feed?.timestamp || new Date().toLocaleTimeString()}</span>
                     </div>
-                    <div class="feed-subtitle">${data.displayData.subtitle}</div>
+                    <div class="feed-subtitle">${data.live_feed?.subtitle || `${this.stats.currentHits} HITs in queue`}</div>
                     <div class="hit-list">${hitsList}</div>
                 `;
 
@@ -453,17 +945,19 @@
                 
                 this.feedContent.insertBefore(item, this.feedContent.firstChild);
                 
-                // Keep only last 50 items
-                while (this.feedContent.children.length > 50) {
+                // Keep only last 100 items
+                while (this.feedContent.children.length > 100) {
                     this.feedContent.removeChild(this.feedContent.lastChild);
                 }
             }
 
             updateStats() {
                 document.getElementById('currentHits').textContent = this.stats.currentHits;
-                document.getElementById('totalValue').textContent = '$' + this.stats.totalValue.toFixed(2);
+                document.getElementById('totalValue').textContent = '
+                 + this.stats.totalValue.toFixed(2);
                 document.getElementById('newHitsToday').textContent = this.stats.newHitsToday;
                 document.getElementById('lastUpdate').textContent = this.stats.lastUpdate || '-';
+                document.getElementById('webhookCount').textContent = this.stats.webhookCount;
             }
 
             updateConnectionStatus(status) {
@@ -471,42 +965,274 @@
                 const statusText = {
                     connected: 'Connected',
                     disconnected: 'Disconnected', 
-                    waiting: 'Waiting for data...'
+                    waiting: 'Listening...'
                 };
                 this.connectionStatus.textContent = statusText[status];
+            }
+
+            logMessage(message, type = 'info') {
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry log-${type}`;
+                logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                
+                this.webhookLog.insertBefore(logEntry, this.webhookLog.firstChild);
+                
+                // Keep only last 50 log entries
+                while (this.webhookLog.children.length > 50) {
+                    this.webhookLog.removeChild(this.webhookLog.lastChild);
+                }
+            }
+
+            isValidWebhookUrl(url) {
+                try {
+                    new URL(url);
+                    return url.includes('webhook') || url.includes('hook') || url.includes('api') || url.includes('zapier');
+                } catch {
+                    return false;
+                }
+            }
+
+            truncateUrl(url) {
+                return url.length > 50 ? url.substring(0, 47) + '...' : url;
             }
 
             setupNotifications() {
                 if ('Notification' in window) {
                     if (Notification.permission === 'default') {
-                        Notification.requestPermission();
+                        document.getElementById('notificationPermission').classList.add('show');
                     }
                 }
             }
 
             showNotification(title, body) {
                 if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification(title, {
+                    const notification = new Notification(title, {
                         body: body,
                         icon: 'https://www.mturk.com/favicon.ico',
-                        badge: 'https://www.mturk.com/favicon.ico'
+                        badge: 'https://www.mturk.com/favicon.ico',
+                        requireInteraction: true,
+                        tag: 'mturk-hit-alert'
                     });
+
+                    // Auto-close after 10 seconds
+                    setTimeout(() => {
+                        notification.close();
+                    }, 10000);
                 }
             }
         }
 
-        // Start the live feed when page loads
+        // Global functions
+        function openWebhookSite() {
+            window.open('https://webhook.site/', '_blank');
+        }
+
+        function openRequestCatcher() {
+            window.open('https://requestcatcher.com/', '_blank');
+        }
+
+        function openNgrok() {
+            window.open('https://ngrok.com/', '_blank');
+        }
+
+        function openZapier() {
+            window.open('https://zapier.com/apps/webhook/integrations', '_blank');
+        }
+
+        function startListening() {
+            window.liveFeed.startListening();
+        }
+
+        function stopListening() {
+            window.liveFeed.stopListening();
+        }
+
+        function copyWebhookUrl() {
+            const url = document.getElementById('webhookUrl').value;
+            if (url) {
+                navigator.clipboard.writeText(url).then(() => {
+                    window.liveFeed.logMessage('📋 Webhook URL copied to clipboard', 'success');
+                }).catch(() => {
+                    window.liveFeed.logMessage('❌ Failed to copy URL', 'error');
+                });
+            }
+        }
+
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        document.getElementById('notificationPermission').classList.remove('show');
+                        window.liveFeed.logMessage('🔔 Browser notifications enabled', 'success');
+                    }
+                });
+            }
+        }
+
+        function testNewHit() {
+            const testData = {
+                source: 'mturk-userscript',
+                event_type: 'new_hits_alert',
+                timestamp: new Date().toISOString(),
+                worker_id: 'A94EAUQ8BYQGI',
+                data: {
+                    type: 'new_hits_alert',
+                    newHitsCount: 1,
+                    newHits: [{
+                        requester_name: 'TestRequester',
+                        title: 'Sample Survey Task - Test Data (High Paying)',
+                        reward: 2.50
+                    }],
+                    totalNewValue: '2.50'
+                },
+                live_feed: {
+                    title: '🆕 1 New HIT Available! (TEST)',
+                    subtitle: 'Total Value: $2.50',
+                    timestamp: new Date().toLocaleTimeString(),
+                    urgency: 'high',
+                    hits: [{
+                        requester: 'TestRequester',
+                        title: 'Sample Survey Task - Test Data (High Paying)',
+                        reward: '$2.50',
+                        urgency: 'high',
+                        timeLeft: '45m'
+                    }]
+                }
+            };
+            
+            window.liveFeed.processWebhookData(testData);
+        }
+
+        function testStatus() {
+            const testData = {
+                source: 'mturk-userscript',
+                event_type: 'status_update',
+                timestamp: new Date().toISOString(),
+                worker_id: 'A94EAUQ8BYQGI',
+                data: {
+                    type: 'status_update',
+                    status: {
+                        currentHitsCount: 4,
+                        totalValue: '3.60',
+                        hits: [
+                            {
+                                requester: 'alalyresearch',
+                                title: 'Composite Attractiveness - African American Male',
+                                reward: '$0.05',
+                                timeLeft: '35m'
+                            },
+                            {
+                                requester: 'alalyresearch',
+                                title: 'Composite Attractiveness - African American Female',
+                                reward: '$0.05',
+                                timeLeft: '37m'
+                            },
+                            {
+                                requester: 'TestRequester',
+                                title: 'Sample Survey Task - Test Data (High Paying)',
+                                reward: '$2.50',
+                                timeLeft: '45m'
+                            },
+                            {
+                                requester: 'ResearchLab',
+                                title: 'Quick Decision Making Study - 10 minutes',
+                                reward: '$1.00',
+                                timeLeft: '1h 20m'
+                            }
+                        ]
+                    }
+                },
+                live_feed: {
+                    title: '📊 Current Queue Status (TEST)',
+                    subtitle: '4 HITs • $3.60 total',
+                    timestamp: new Date().toLocaleTimeString()
+                }
+            };
+            
+            window.liveFeed.processWebhookData(testData);
+        }
+
+        function clearAll() {
+            // Clear feed
+            document.getElementById('feedContent').innerHTML = `
+                <div class="no-data">
+                    <h3>🎯 Feed Cleared!</h3>
+                    <p>Ready to receive new MTurk webhook data.</p>
+                    <p>Your webhook URL: <code>${document.getElementById('webhookUrl').value || 'Not configured'}</code></p>
+                </div>
+            `;
+            
+            // Clear logs
+            document.getElementById('webhookLog').innerHTML = `
+                <div class="log-entry log-info">
+                    📋 [${new Date().toLocaleTimeString()}] Feed and logs cleared.
+                </div>
+            `;
+            
+            // Reset stats
+            window.liveFeed.stats = {
+                currentHits: 0,
+                totalValue: 0,
+                newHitsToday: 0,
+                lastUpdate: null,
+                webhookCount: 0
+            };
+            window.liveFeed.updateStats();
+            localStorage.removeItem('mturk_webhook_stats');
+        }
+
+        // Auto-update webhook URL display when input changes
         document.addEventListener('DOMContentLoaded', () => {
             window.liveFeed = new MTurkLiveFeed();
+            
+            document.getElementById('webhookUrl').addEventListener('input', () => {
+                window.liveFeed.updateDisplayUrl();
+            });
+
+            document.getElementById('soundEnabled').addEventListener('change', () => {
+                window.liveFeed.saveSettings();
+            });
         });
 
-        // API endpoint simulation - replace with real server endpoint
-        // This shows how you would receive the data from your userscript
-        window.receiveMTurkData = function(data) {
+        // Manual webhook data injection (for external integrations)
+        window.injectWebhookData = function(data) {
             if (window.liveFeed) {
-                window.liveFeed.receiveData(data);
+                window.liveFeed.processWebhookData(data);
             }
         };
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        if (window.liveFeed.isListening) {
+                            stopListening();
+                        } else {
+                            startListening();
+                        }
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        clearAll();
+                        break;
+                    case 't':
+                        e.preventDefault();
+                        testNewHit();
+                        break;
+                }
+            }
+        });
+
+        // Keep page alive and prevent sleep
+        setInterval(() => {
+            // Prevent browser from sleeping
+            if (window.liveFeed && window.liveFeed.isListening) {
+                console.log('MTurk Live Feed: Active monitoring...');
+            }
+        }, 60000); // Every minute
     </script>
 </body>
 </html>
+                
