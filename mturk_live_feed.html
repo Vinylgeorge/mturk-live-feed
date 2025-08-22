@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTurk Live Feed Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .status-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .status-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feed {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .feed-header {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .feed-content {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .feed-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            animation: slideIn 0.5s ease-out;
+            transition: background-color 0.3s ease;
+        }
+
+        .feed-item:hover {
+            background-color: #f8f9ff;
+        }
+
+        .feed-item.new-hit {
+            border-left: 4px solid #00c851;
+            background: linear-gradient(90deg, #00c85120 0%, transparent 100%);
+        }
+
+        .feed-item.status {
+            border-left: 4px solid #667eea;
+            background: linear-gradient(90deg, #667eea20 0%, transparent 100%);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feed-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feed-subtitle {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .hit-list {
+            margin-top: 10px;
+        }
+
+        .hit-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .hit-info {
+            overflow: hidden;
+        }
+
+        .hit-requester {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+
+        .hit-title {
+            color: #333;
+            font-size: 0.85rem;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hit-reward {
+            font-weight: bold;
+            color: #00c851;
+            font-size: 1.1rem;
+        }
+
+        .hit-time {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: right;
+        }
+
+        .urgency-critical { border-left: 4px solid #ff4444; }
+        .urgency-high { border-left: 4px solid #ff8800; }
+        .urgency-medium { border-left: 4px solid #ffbb33; }
+        .urgency-low { border-left: 4px solid #00c851; }
+
+        .timestamp {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .connected {
+            background: #00c851;
+            color: white;
+        }
+
+        .disconnected {
+            background: #ff4444;
+            color: white;
+        }
+
+        .waiting {
+            background: #ffbb33;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .status-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .hit-item {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-status" id="connectionStatus">Waiting for data...</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🎯 MTurk Live Feed</h1>
+            <p>Real-time HIT monitoring dashboard</p>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-value" id="currentHits">-</div>
+                <div class="status-label">Current HITs</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="totalValue">$0.00</div>
+                <div class="status-label">Total Value</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="newHitsToday">0</div>
+                <div class="status-label">New HITs Today</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="lastUpdate">-</div>
+                <div class="status-label">Last Update</div>
+            </div>
+        </div>
+
+        <div class="feed">
+            <div class="feed-header">
+                📡 Live Feed Activity
+            </div>
+            <div class="feed-content" id="feedContent">
+                <div class="no-data">
+                    <h3>Waiting for MTurk data...</h3>
+                    <p>Make sure your userscript is running and monitoring HITs.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MTurkLiveFeed {
+            constructor() {
+                this.feedContent = document.getElementById('feedContent');
+                this.connectionStatus = document.getElementById('connectionStatus');
+                this.stats = {
+                    currentHits: 0,
+                    totalValue: 0,
+                    newHitsToday: 0,
+                    lastUpdate: null
+                };
+                
+                this.startListening();
+                this.setupNotifications();
+            }
+
+            startListening() {
+                // For demo purposes, we'll simulate receiving data
+                // In a real implementation, you would:
+                // 1. Use WebSockets to receive real-time data
+                // 2. Set up an API endpoint to receive the userscript data
+                // 3. Use Server-Sent Events (SSE)
+                // 4. Use a service like Pusher, Firebase, or Socket.io
+
+                console.log('🎯 MTurk Live Feed Dashboard started');
+                this.updateConnectionStatus('waiting');
+
+                // Simulate receiving data for demo
+                this.simulateData();
+            }
+
+            simulateData() {
+                // This simulates receiving data - replace with real implementation
+                setTimeout(() => {
+                    this.receiveData({
+                        type: 'status_update',
+                        timestamp: new Date().toISOString(),
+                        workerId: 'A94EAUQ8BYQGI',
+                        feedType: 'status',
+                        status: {
+                            currentHitsCount: 2,
+                            totalValue: '0.10',
+                            hits: [
+                                {
+                                    requester: 'alalyresearch',
+                                    title: 'Composite Attractiveness - African American Male',
+                                    reward: '$0.05',
+                                    timeLeft: '45m'
+                                },
+                                {
+                                    requester: 'alalyresearch', 
+                                    title: 'Composite Attractiveness - African American Female',
+                                    reward: '$0.05',
+                                    timeLeft: '47m'
+                                }
+                            ]
+                        },
+                        displayData: {
+                            title: '📊 Current Queue Status',
+                            subtitle: '2 HITs • $0.10 total',
+                            timestamp: new Date().toLocaleTimeString()
+                        }
+                    });
+                }, 2000);
+
+                // Simulate new HIT after 10 seconds
+                setTimeout(() => {
+                    this.receiveData({
+                        type: 'new_hits_alert',
+                        timestamp: new Date().toISOString(),
+                        workerId: 'A94EAUQ8BYQGI',
+                        newHitsCount: 1,
+                        newHits: [{
+                            requester_name: 'ExampleRequester',
+                            title: 'Quick Survey Task - 5 minutes',
+                            reward: 0.50,
+                            urgency: 'high',
+                            timeLeft: '55m'
+                        }],
+                        totalNewValue: '0.50',
+                        feedType: 'hit_update',
+                        displayData: {
+                            title: '🆕 1 New HIT Available!',
+                            subtitle: 'Total Value: $0.50',
+                            timestamp: new Date().toLocaleTimeString()
+                        }
+                    });
+                }, 10000);
+            }
+
+            receiveData(data) {
+                this.updateConnectionStatus('connected');
+                console.log('📡 Received data:', data);
+
+                if (data.type === 'new_hits_alert') {
+                    this.handleNewHits(data);
+                    this.stats.newHitsToday += data.newHitsCount;
+                } else if (data.type === 'status_update') {
+                    this.handleStatusUpdate(data);
+                }
+
+                this.updateStats();
+                this.stats.lastUpdate = new Date().toLocaleTimeString();
+            }
+
+            handleNewHits(data) {
+                const feedItem = document.createElement('div');
+                feedItem.className = 'feed-item new-hit';
+                
+                const hitsList = data.newHits.map(hit => `
+                    <div class="hit-item urgency-${hit.urgency || 'low'}">
+                        <div class="hit-info">
+                            <div class="hit-requester">${hit.requester_name}</div>
+                            <div class="hit-title">${hit.title}</div>
+                        </div>
+                        <div class="hit-reward">${typeof hit.reward === 'number' ? '$' + hit.reward.toFixed(2) : hit.reward}</div>
+                        <div class="hit-time">${hit.timeLeft || 'Unknown'}</div>
+                    </div>
+                `).join('');
+
+                feedItem.innerHTML = `
+                    <div class="feed-title">
+                        ${data.displayData.title}
+                        <span class="timestamp">${data.displayData.timestamp}</span>
+                    </div>
+                    <div class="feed-subtitle">${data.displayData.subtitle}</div>
+                    <div class="hit-list">${hitsList}</div>
+                `;
+
+                this.addToFeed(feedItem);
+                this.showNotification(data.displayData.title, data.displayData.subtitle);
+            }
+
+            handleStatusUpdate(data) {
+                this.stats.currentHits = data.status.currentHitsCount;
+                this.stats.totalValue = parseFloat(data.status.totalValue || 0);
+
+                const feedItem = document.createElement('div');
+                feedItem.className = 'feed-item status';
+                
+                const hitsList = data.status.hits.map(hit => `
+                    <div class="hit-item">
+                        <div class="hit-info">
+                            <div class="hit-requester">${hit.requester}</div>
+                            <div class="hit-title">${hit.title}</div>
+                        </div>
+                        <div class="hit-reward">${hit.reward}</div>
+                        <div class="hit-time">${hit.timeLeft}</div>
+                    </div>
+                `).join('');
+
+                feedItem.innerHTML = `
+                    <div class="feed-title">
+                        ${data.displayData.title}
+                        <span class="timestamp">${data.displayData.timestamp}</span>
+                    </div>
+                    <div class="feed-subtitle">${data.displayData.subtitle}</div>
+                    <div class="hit-list">${hitsList}</div>
+                `;
+
+                this.addToFeed(feedItem);
+            }
+
+            addToFeed(item) {
+                if (this.feedContent.querySelector('.no-data')) {
+                    this.feedContent.innerHTML = '';
+                }
+                
+                this.feedContent.insertBefore(item, this.feedContent.firstChild);
+                
+                // Keep only last 50 items
+                while (this.feedContent.children.length > 50) {
+                    this.feedContent.removeChild(this.feedContent.lastChild);
+                }
+            }
+
+            updateStats() {
+                document.getElementById('currentHits').textContent = this.stats.currentHits;
+                document.getElementById('totalValue').textContent = '$' + this.stats.totalValue.toFixed(2);
+                document.getElementById('newHitsToday').textContent = this.stats.newHitsToday;
+                document.getElementById('lastUpdate').textContent = this.stats.lastUpdate || '-';
+            }
+
+            updateConnectionStatus(status) {
+                this.connectionStatus.className = `connection-status ${status}`;
+                const statusText = {
+                    connected: 'Connected',
+                    disconnected: 'Disconnected', 
+                    waiting: 'Waiting for data...'
+                };
+                this.connectionStatus.textContent = statusText[status];
+            }
+
+            setupNotifications() {
+                if ('Notification' in window) {
+                    if (Notification.permission === 'default') {
+                        Notification.requestPermission();
+                    }
+                }
+            }
+
+            showNotification(title, body) {
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification(title, {
+                        body: body,
+                        icon: 'https://www.mturk.com/favicon.ico',
+                        badge: 'https://www.mturk.com/favicon.ico'
+                    });
+                }
+            }
+        }
+
+        // Start the live feed when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.liveFeed = new MTurkLiveFeed();
+        });
+
+        // API endpoint simulation - replace with real server endpoint
+        // This shows how you would receive the data from your userscript
+        window.receiveMTurkData = function(data) {
+            if (window.liveFeed) {
+                window.liveFeed.receiveData(data);
+            }
+        };
+    </script>
+</body>
+</html>
