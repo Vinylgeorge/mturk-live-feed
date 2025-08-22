@@ -787,12 +787,15 @@
             }
 
             startUptime() {
-                this.uptimeInterval = setInterval(() => {
-                    const elapsed = Date.now() - this.startTime;
-                    const minutes = Math.floor(elapsed / 60000);
-                    const seconds = Math.floor((elapsed % 60000) / 1000);
-                    document.getElementById('uptime').textContent = 
-                        minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                var self = this;
+                this.uptimeInterval = setInterval(function() {
+                    var elapsed = Date.now() - self.startTime;
+                    var minutes = Math.floor(elapsed / 60000);
+                    var seconds = Math.floor((elapsed % 60000) / 1000);
+                    var uptimeEl = document.getElementById('uptime');
+                    if (uptimeEl) {
+                        uptimeEl.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                    }
                 }, 1000);
             }
 
