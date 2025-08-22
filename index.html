@@ -453,34 +453,31 @@
             border-left: 3px solid #667eea;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
+        .notification-permission {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(0,0,0,0.05);
+        .notification-permission.show {
+            display: block;
         }
 
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 8px;
+        .sound-controls {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 10px;
         }
 
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 500;
+        .sound-controls label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
         }
 
         @media (max-width: 768px) {
@@ -510,33 +507,6 @@
             .service-buttons {
                 grid-template-columns: 1fr;
             }
-        }
-
-        .notification-permission {
-            background: rgba(255, 193, 7, 0.1);
-            border: 1px solid #ffc107;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            display: none;
-        }
-
-        .notification-permission.show {
-            display: block;
-        }
-
-        .sound-controls {
-            margin: 15px 0;
-            padding: 15px;
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 10px;
-        }
-
-        .sound-controls label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
         }
     </style>
 </head>
@@ -674,7 +644,6 @@
                 this.updateDisplayUrl();
                 this.setupEventListeners();
                 
-                // Auto-start if webhook URL is configured
                 if (this.webhookUrl.value.trim()) {
                     setTimeout(() => {
                         this.startListening();
@@ -683,7 +652,6 @@
             }
 
             setupEventListeners() {
-                // Webhook service buttons
                 document.getElementById('webhook-site-btn').addEventListener('click', () => {
                     window.open('https://webhook.site/', '_blank');
                 });
@@ -700,7 +668,6 @@
                     window.open('https://zapier.com/apps/webhook/integrations', '_blank');
                 });
 
-                // Control buttons
                 document.getElementById('start-btn').addEventListener('click', () => {
                     this.startListening();
                 });
@@ -729,7 +696,6 @@
                     this.requestNotificationPermission();
                 });
 
-                // Input listeners
                 this.webhookUrl.addEventListener('input', () => {
                     this.updateDisplayUrl();
                 });
@@ -738,7 +704,6 @@
                     this.saveSettings();
                 });
 
-                // Keyboard shortcuts
                 document.addEventListener('keydown', (e) => {
                     if (e.ctrlKey || e.metaKey) {
                         switch(e.key) {
@@ -764,24 +729,21 @@
             }
 
             loadSettings() {
-                // Load saved webhook URL
                 const savedUrl = localStorage.getItem('mturk_webhook_url');
                 if (savedUrl) {
                     this.webhookUrl.value = savedUrl;
                 }
                 
-                // Load saved stats
                 const savedStats = localStorage.getItem('mturk_webhook_stats');
                 if (savedStats) {
                     try {
-                        this.stats = { ...this.stats, ...JSON.parse(savedStats) };
+                        this.stats = Object.assign(this.stats, JSON.parse(savedStats));
                         this.updateStats();
                     } catch (e) {
                         console.error('Error loading stats:', e);
                     }
                 }
 
-                // Load sound setting
                 const soundEnabled = localStorage.getItem('mturk_sound_enabled');
                 if (soundEnabled !== null) {
                     document.getElementById('soundEnabled').checked = soundEnabled === 'true';
@@ -795,7 +757,6 @@
             }
 
             setupAudio() {
-                // Create notification sound programmatically
                 this.audioContext = null;
                 try {
                     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -808,7 +769,6 @@
                 if (!document.getElementById('soundEnabled').checked) return;
                 
                 if (this.audioContext) {
-                    // Create a simple beep sound
                     const oscillator = this.audioContext.createOscillator();
                     const gainNode = this.audioContext.createGain();
                     
@@ -832,7 +792,7 @@
                     const minutes = Math.floor(elapsed / 60000);
                     const seconds = Math.floor((elapsed % 60000) / 1000);
                     document.getElementById('uptime').textContent = 
-                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
                 }, 1000);
             }
 
@@ -857,9 +817,8 @@
                 this.saveSettings();
                 this.updateDisplayUrl();
                 this.updateConnectionStatus('waiting');
-                this.logMessage(`🎧 Started listening to: ${this.truncateUrl(url)}`, 'success');
+                this.logMessage('🎧 Started listening to: ' + this.truncateUrl(url), 'success');
                 
-                // Start polling for data
                 this.startPolling();
             }
 
@@ -874,7 +833,6 @@
             }
 
             startPolling() {
-                // Poll every 10 seconds for webhook.site data
                 this.pollInterval = setInterval(() => {
                     if (this.webhookUrl.value.includes('webhook.site')) {
                         this.fetchWebhookSiteData();
@@ -886,7 +844,7 @@
             }
 
             checkConnectionTimeout() {
-                if (this.lastWebhookTime && Date.now() - this.lastWebhookTime > 300000) { // 5 minutes
+                if (this.lastWebhookTime && Date.now() - this.lastWebhookTime > 300000) {
                     this.updateConnectionStatus('waiting');
                 }
             }
@@ -895,7 +853,7 @@
                 try {
                     const url = this.webhookUrl.value;
                     const webhookId = url.split('/').pop();
-                    const apiUrl = `https://webhook.site/token/${webhookId}/requests?sorting=newest`;
+                    const apiUrl = 'https://webhook.site/token/' + webhookId + '/requests?sorting=newest';
                     
                     const response = await fetch(apiUrl);
                     if (response.ok) {
@@ -903,20 +861,17 @@
                         this.processWebhookSiteData(data);
                     }
                 } catch (error) {
-                    // Silent fail for polling
                     console.log('Polling error (normal):', error);
                 }
             }
 
             processWebhookSiteData(requests) {
                 const recentRequests = requests.data || [];
-                
-                // Only process requests from the last 5 minutes to avoid duplicates
                 const fiveMinutesAgo = Date.now() - 300000;
                 
-                recentRequests.forEach(request => {
+                for (const request of recentRequests) {
                     const requestTime = new Date(request.created_at).getTime();
-                    if (requestTime < fiveMinutesAgo) return;
+                    if (requestTime < fiveMinutesAgo) continue;
                     
                     if (request.content && typeof request.content === 'string') {
                         try {
@@ -929,14 +884,14 @@
                             // Not JSON or not our data
                         }
                     }
-                });
+                }
             }
 
             processWebhookData(data) {
                 this.updateConnectionStatus('connected');
                 this.stats.webhookCount++;
                 this.lastWebhookTime = Date.now();
-                this.logMessage(`📡 Received: ${data.event_type} from ${data.worker_id}`, 'success');
+                this.logMessage('📡 Received: ' + data.event_type + ' from ' + data.worker_id, 'success');
                 
                 if (data.event_type === 'new_hits_alert') {
                     this.handleNewHits(data);
@@ -953,38 +908,37 @@
 
             handleNewHits(data) {
                 const feedItem = document.createElement('div');
-                feedItem.className = `feed-item new-hit ${data.live_feed?.urgency || 'low'}`;
+                feedItem.className = 'feed-item new-hit ' + (data.live_feed && data.live_feed.urgency || 'low');
                 
-                const hits = data.live_feed?.hits || [];
-                const hitsList = hits.map(hit => `
-                    <div class="hit-item urgency-${hit.urgency || 'low'}">
-                        <div class="hit-info">
-                            <div class="hit-requester">${hit.requester}</div>
-                            <div class="hit-title" title="${hit.title}">${hit.title}</div>
-                        </div>
-                        <div class="hit-reward">${hit.reward}</div>
-                        <div class="hit-time">${hit.timeLeft || 'Unknown'}</div>
-                    </div>
-                `).join('');
+                const hits = data.live_feed && data.live_feed.hits || [];
+                const hitsList = hits.map(hit => 
+                    '<div class="hit-item urgency-' + (hit.urgency || 'low') + '">' +
+                        '<div class="hit-info">' +
+                            '<div class="hit-requester">' + hit.requester + '</div>' +
+                            '<div class="hit-title" title="' + hit.title + '">' + hit.title + '</div>' +
+                        '</div>' +
+                        '<div class="hit-reward">' + hit.reward + '</div>' +
+                        '<div class="hit-time">' + (hit.timeLeft || 'Unknown') + '</div>' +
+                    '</div>'
+                ).join('');
 
-                feedItem.innerHTML = `
-                    <div class="feed-title">
-                        ${data.live_feed?.title || '🆕 New HITs Available!'}
-                        <span class="timestamp">${data.live_feed?.timestamp || new Date().toLocaleTimeString()}</span>
-                    </div>
-                    <div class="feed-subtitle">${data.live_feed?.subtitle || `${data.data?.newHitsCount || 0} new HITs`}</div>
-                    <div class="hit-list">${hitsList}</div>
-                `;
+                feedItem.innerHTML = 
+                    '<div class="feed-title">' +
+                        (data.live_feed && data.live_feed.title || '🆕 New HITs Available!') +
+                        '<span class="timestamp">' + (data.live_feed && data.live_feed.timestamp || new Date().toLocaleTimeString()) + '</span>' +
+                    '</div>' +
+                    '<div class="feed-subtitle">' + (data.live_feed && data.live_feed.subtitle || (data.data && data.data.newHitsCount || 0) + ' new HITs') + '</div>' +
+                    '<div class="hit-list">' + hitsList + '</div>';
 
                 this.addToFeed(feedItem);
                 this.showNotification(
-                    data.live_feed?.title || 'New MTurk HITs!',
-                    data.live_feed?.subtitle || `${data.data?.newHitsCount || 0} HITs available`
+                    data.live_feed && data.live_feed.title || 'New MTurk HITs!',
+                    data.live_feed && data.live_feed.subtitle || (data.data && data.data.newHitsCount || 0) + ' HITs available'
                 );
             }
 
             handleStatusUpdate(data) {
-                const status = data.data?.status || {};
+                const status = data.data && data.data.status || {};
                 this.stats.currentHits = status.currentHitsCount || 0;
                 this.stats.totalValue = parseFloat(status.totalValue || 0);
 
@@ -992,25 +946,24 @@
                 feedItem.className = 'feed-item status';
                 
                 const hits = status.hits || [];
-                const hitsList = hits.map(hit => `
-                    <div class="hit-item">
-                        <div class="hit-info">
-                            <div class="hit-requester">${hit.requester}</div>
-                            <div class="hit-title" title="${hit.title}">${hit.title}</div>
-                        </div>
-                        <div class="hit-reward">${hit.reward}</div>
-                        <div class="hit-time">${hit.timeLeft}</div>
-                    </div>
-                `).join('');
+                const hitsList = hits.map(hit => 
+                    '<div class="hit-item">' +
+                        '<div class="hit-info">' +
+                            '<div class="hit-requester">' + hit.requester + '</div>' +
+                            '<div class="hit-title" title="' + hit.title + '">' + hit.title + '</div>' +
+                        '</div>' +
+                        '<div class="hit-reward">' + hit.reward + '</div>' +
+                        '<div class="hit-time">' + hit.timeLeft + '</div>' +
+                    '</div>'
+                ).join('');
 
-                feedItem.innerHTML = `
-                    <div class="feed-title">
-                        ${data.live_feed?.title || '📊 Queue Status Update'}
-                        <span class="timestamp">${data.live_feed?.timestamp || new Date().toLocaleTimeString()}</span>
-                    </div>
-                    <div class="feed-subtitle">${data.live_feed?.subtitle || `${this.stats.currentHits} HITs in queue`}</div>
-                    <div class="hit-list">${hitsList}</div>
-                `;
+                feedItem.innerHTML = 
+                    '<div class="feed-title">' +
+                        (data.live_feed && data.live_feed.title || '📊 Queue Status Update') +
+                        '<span class="timestamp">' + (data.live_feed && data.live_feed.timestamp || new Date().toLocaleTimeString()) + '</span>' +
+                    '</div>' +
+                    '<div class="feed-subtitle">' + (data.live_feed && data.live_feed.subtitle || this.stats.currentHits + ' HITs in queue') + '</div>' +
+                    '<div class="hit-list">' + hitsList + '</div>';
 
                 this.addToFeed(feedItem);
             }
@@ -1022,7 +975,6 @@
                 
                 this.feedContent.insertBefore(item, this.feedContent.firstChild);
                 
-                // Keep only last 100 items
                 while (this.feedContent.children.length > 100) {
                     this.feedContent.removeChild(this.feedContent.lastChild);
                 }
@@ -1031,14 +983,14 @@
             updateStats() {
                 document.getElementById('currentHits').textContent = this.stats.currentHits;
                 document.getElementById('totalValue').textContent = '
-             + this.stats.totalValue.toFixed(2);
+                 + this.stats.totalValue.toFixed(2);
                 document.getElementById('newHitsToday').textContent = this.stats.newHitsToday;
                 document.getElementById('lastUpdate').textContent = this.stats.lastUpdate || '-';
                 document.getElementById('webhookCount').textContent = this.stats.webhookCount;
             }
 
             updateConnectionStatus(status) {
-                this.connectionStatus.className = `connection-status ${status}`;
+                this.connectionStatus.className = 'connection-status ' + status;
                 const statusText = {
                     connected: 'Connected',
                     disconnected: 'Disconnected', 
@@ -1047,14 +999,14 @@
                 this.connectionStatus.textContent = statusText[status];
             }
 
-            logMessage(message, type = 'info') {
+            logMessage(message, type) {
+                type = type || 'info';
                 const logEntry = document.createElement('div');
-                logEntry.className = `log-entry log-${type}`;
-                logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                logEntry.className = 'log-entry log-' + type;
+                logEntry.textContent = '[' + new Date().toLocaleTimeString() + '] ' + message;
                 
                 this.webhookLog.insertBefore(logEntry, this.webhookLog.firstChild);
                 
-                // Keep only last 50 log entries
                 while (this.webhookLog.children.length > 50) {
                     this.webhookLog.removeChild(this.webhookLog.lastChild);
                 }
@@ -1064,7 +1016,7 @@
                 try {
                     new URL(url);
                     return url.includes('webhook') || url.includes('hook') || url.includes('api') || url.includes('zapier');
-                } catch {
+                } catch (e) {
                     return false;
                 }
             }
@@ -1091,8 +1043,7 @@
                         tag: 'mturk-hit-alert'
                     });
 
-                    // Auto-close after 10 seconds
-                    setTimeout(() => {
+                    setTimeout(function() {
                         notification.close();
                     }, 10000);
                 }
@@ -1100,10 +1051,11 @@
 
             requestNotificationPermission() {
                 if ('Notification' in window) {
-                    Notification.requestPermission().then(permission => {
+                    const self = this;
+                    Notification.requestPermission().then(function(permission) {
                         if (permission === 'granted') {
                             document.getElementById('notificationPermission').classList.remove('show');
-                            this.logMessage('🔔 Browser notifications enabled', 'success');
+                            self.logMessage('🔔 Browser notifications enabled', 'success');
                         }
                     });
                 }
@@ -1112,10 +1064,11 @@
             copyWebhookUrl() {
                 const url = this.webhookUrl.value;
                 if (url) {
-                    navigator.clipboard.writeText(url).then(() => {
-                        this.logMessage('📋 Webhook URL copied to clipboard', 'success');
-                    }).catch(() => {
-                        this.logMessage('❌ Failed to copy URL', 'error');
+                    const self = this;
+                    navigator.clipboard.writeText(url).then(function() {
+                        self.logMessage('📋 Webhook URL copied to clipboard', 'success');
+                    }).catch(function() {
+                        self.logMessage('❌ Failed to copy URL', 'error');
                     });
                 }
             }
@@ -1204,23 +1157,18 @@
             }
 
             clearAll() {
-                // Clear feed
-                this.feedContent.innerHTML = `
-                    <div class="no-data">
-                        <h3>🎯 Feed Cleared!</h3>
-                        <p>Ready to receive new MTurk webhook data.</p>
-                        <p>Your webhook URL: <code>${this.webhookUrl.value || 'Not configured'}</code></p>
-                    </div>
-                `;
+                this.feedContent.innerHTML = 
+                    '<div class="no-data">' +
+                        '<h3>🎯 Feed Cleared!</h3>' +
+                        '<p>Ready to receive new MTurk webhook data.</p>' +
+                        '<p>Your webhook URL: <code>' + (this.webhookUrl.value || 'Not configured') + '</code></p>' +
+                    '</div>';
                 
-                // Clear logs
-                this.webhookLog.innerHTML = `
-                    <div class="log-entry log-info">
-                        📋 [${new Date().toLocaleTimeString()}] Feed and logs cleared.
-                    </div>
-                `;
+                this.webhookLog.innerHTML = 
+                    '<div class="log-entry log-info">' +
+                        '📋 [' + new Date().toLocaleTimeString() + '] Feed and logs cleared.' +
+                    '</div>';
                 
-                // Reset stats
                 this.stats = {
                     currentHits: 0,
                     totalValue: 0,
@@ -1233,26 +1181,22 @@
             }
         }
 
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             window.liveFeed = new MTurkLiveFeed();
         });
 
-        // Manual webhook data injection (for external integrations)
         window.injectWebhookData = function(data) {
             if (window.liveFeed) {
                 window.liveFeed.processWebhookData(data);
             }
         };
 
-        // Keep page alive and prevent sleep
-        setInterval(() => {
-            // Prevent browser from sleeping
+        setInterval(function() {
             if (window.liveFeed && window.liveFeed.isListening) {
                 console.log('MTurk Live Feed: Active monitoring...');
             }
-        }, 60000); // Every minute
+        }, 60000);
     </script>
 </body>
 </html>
-            
+                
